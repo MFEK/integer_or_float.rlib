@@ -130,9 +130,52 @@ macro_rules! impl_from_iof_for_primitives_all {
     }
 }
 
+macro_rules! impl_from_integer_for_iof {
+    ($integer_type:ident) => {
+
+        impl From<$integer_type> for IntegerOrFloat {
+            fn from(p: $integer_type) -> Self {
+                IntegerOrFloat::Integer(p as i32)
+            }
+        }
+
+    }
+}
+
+macro_rules! impl_from_integer_for_iof_all {
+    ($($primitive:ident),+) => {
+        $(
+            impl_from_integer_for_iof!($primitive);
+        )+
+    }
+}
+
+macro_rules! impl_from_float_for_iof {
+    ($integer_type:ident) => {
+
+        impl From<$integer_type> for IntegerOrFloat {
+            fn from(p: $integer_type) -> Self {
+                IntegerOrFloat::Float(p as f32)
+            }
+        }
+
+    }
+}
+
+macro_rules! impl_from_float_for_iof_all {
+    ($($primitive:ident),+) => {
+        $(
+            impl_from_float_for_iof!($primitive);
+        )+
+    }
+}
+
 impl_from_iof_for_primitives_all!(i8, i16, i32, i64, isize);
 impl_from_iof_for_primitives_all!(u8, u16, u32, u64, usize);
 impl_from_iof_for_primitives_all!(f32, f64);
+
+impl_from_integer_for_iof_all!(i8, i16, i32, i64, isize, u8, u16, u32, u64, usize);
+impl_from_float_for_iof_all!(f32, f64);
 
 use std::ops::{Mul, Div, Add, Sub, Rem};
 // IntegerOrFloat * IntegerOrFloat, etc.
@@ -220,7 +263,7 @@ impl TryFrom<&str> for IntegerOrFloat {
 mod tests {
     #[test]
     fn test_impls() {
-        use crate::IntegerOrFloat::*;
+        use crate::IntegerOrFloat::{self, *};
 
         assert_eq!(Integer(3) * Float(-1.0), Float(-3.0));
         assert_eq!(Integer(3) * Integer(3), Integer(9));
@@ -236,5 +279,11 @@ mod tests {
         assert_eq!(x, -5);
         let x: f64 = Integer(5).into();
         assert_eq!(x, 5.0);
+
+        let x: IntegerOrFloat = (4.5).into();
+        assert_eq!(x, Float(4.5));
+
+        let x: IntegerOrFloat = (10).into();
+        assert_eq!(x, Integer(10));
     }
 }
