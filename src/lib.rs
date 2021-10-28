@@ -1,8 +1,10 @@
 //! This is a Rust implementation of the UFO data type "integer or float".
+#[cfg(feature = "default")]
 use serde::{Serialize, Deserialize};
 
 /// The UFO data type "integer or float".
-#[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
+#[cfg_attr(feature = "default", derive(Serialize, Deserialize))]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum IntegerOrFloat {
     Integer(i32),
     Float(f32)
