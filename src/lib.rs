@@ -10,6 +10,12 @@ pub enum IntegerOrFloat {
     Float(f32)
 }
 
+impl Default for IntegerOrFloat {
+    fn default() -> Self {
+        IntegerOrFloat::Float(f32::default())
+    }
+}
+
 macro_rules! impl_std_ops_iof_iof {
     ($op:tt, $trait:ident, $fn:ident) => {
         
