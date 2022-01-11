@@ -6,6 +6,7 @@ use serde::{Serialize, Deserialize};
 mod hash;
 
 pub mod encode;
+mod from_str;
 
 /// The UFO data type "integer or float".
 #[cfg_attr(feature = "default", derive(Serialize, Deserialize))]
