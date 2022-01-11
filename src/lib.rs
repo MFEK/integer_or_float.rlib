@@ -1,4 +1,6 @@
 //! This is a Rust implementation of the UFO data type "integer or float".
+#![cfg_attr(not(std), no_std)]
+
 #[cfg(feature = "default")]
 use serde::{Serialize, Deserialize};
 
@@ -6,7 +8,8 @@ use serde::{Serialize, Deserialize};
 mod hash;
 
 pub mod encode;
-mod from_str;
+mod str_conv;
+pub use str_conv::ConversionError;
 
 /// The UFO data type "integer or float".
 #[cfg_attr(feature = "default", derive(Serialize, Deserialize))]
@@ -191,7 +194,7 @@ impl_from_iof_for_primitives_all!(f32, f64);
 impl_from_integer_for_iof_all!(i8, i16, i32, i64, isize, u8, u16, u32, u64, usize);
 impl_from_float_for_iof_all!(f32, f64);
 
-use std::ops::{Mul, Div, Add, Sub, Rem};
+use core::ops::{Mul, Div, Add, Sub, Rem};
 // IntegerOrFloat * IntegerOrFloat, etc.
 impl_std_ops_iof_iof!(*, Mul, mul);
 impl_std_ops_iof_iof!(/, Div, div);
@@ -213,63 +216,10 @@ impl_std_ops_primitives_iof_all!(+, Add, add);
 impl_std_ops_primitives_iof_all!(-, Sub, sub);
 impl_std_ops_primitives_iof_all!(%, Rem, rem);
 
-use std::ops::Neg;
+use core::ops::Neg;
 impl Neg for IntegerOrFloat {
     type Output = Self;
     fn neg(self) -> Self::Output {
         self * -1
-    }
-}
-
-impl From<IntegerOrFloat> for String {
-    fn from(iof: IntegerOrFloat) -> Self {
-        match iof {
-            IntegerOrFloat::Float(f) => f.to_string(),
-            IntegerOrFloat::Integer(i) => i.to_string()
-        }
-    }
-}
-
-impl ToString for IntegerOrFloat {
-    fn to_string(&self) -> String {
-        String::from(*self)
-    }
-}
-
-use std::error::Error;
-use std::fmt;
-#[derive(Debug, PartialEq)]
-pub enum ConversionError {
-    IntegerConversionError,
-    FloatConversionError
-}
-use ConversionError::*;
-impl fmt::Display for ConversionError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            IntegerConversionError => write!(f, "String not an integer"),
-            FloatConversionError => write!(f, "String not a floating point number")
-        }
-    }
-}
-impl Error for ConversionError {}
-
-use std::convert::TryFrom;
-impl TryFrom<&str> for IntegerOrFloat {
-    type Error = ConversionError;
-    fn try_from(s: &str) -> Result<Self, Self::Error> {
-        if !s.contains('.') {
-            if let Ok(i) = s.parse::<i32>() {
-                Ok(IntegerOrFloat::Integer(i))
-            } else {
-                Err(IntegerConversionError)
-            }
-        } else {
-            if let Ok(f) = s.parse::<f32>() {
-                Ok(IntegerOrFloat::Float(f))
-            } else {
-                Err(FloatConversionError)
-            }
-        }
     }
 }

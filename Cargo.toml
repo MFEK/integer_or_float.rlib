@@ -11,5 +11,6 @@ serde = { version = "1.0", features = ["derive"], optional = true }
 num-traits = { version = "0.2", optional = true }
 
 [features]
-default = ["serde"]
+default = ["serde", "std"]
 hash = ["num-traits"]
+std = []
