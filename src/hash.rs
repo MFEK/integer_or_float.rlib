@@ -1,5 +1,5 @@
 use core::hash::{Hash, Hasher};
-use num_traits::Float as _;
+use num_traits::float::FloatCore as _;
 
 use super::IntegerOrFloat::{self, *};
 
@@ -17,22 +17,3 @@ impl Hash for IntegerOrFloat {
         }
     }
 }
-
-use crate::encode::*;
-
-pub trait FromEncoded: Copy {
-    fn from_encoded(mest: impl Into<MantissaExpSignTriplet>) -> Self;
-}
-
-macro_rules! impl_from_encoded {
-    ($type:ident) => {
-        impl FromEncoded for $type {
-            fn from_encoded(mest: impl Into<MantissaExpSignTriplet>) -> Self {
-                MantissaExpSignTriplet::integer_encode(mest.into()) as $type
-            }
-        }
-    }
-}
-
-impl_from_encoded!(f32);
-impl_from_encoded!(f64);

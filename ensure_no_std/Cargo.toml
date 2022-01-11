@@ -1,0 +1,23 @@
+[package]
+name = "ensure_no_std"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+integer_or_float = { path = "..", default_features = false, features=["no_std", "ignore_no_std_tests_check"] }
+libc-print = "0.1"
+num-format = { version = "0.4", default_features = false }
+ryu = "1.0"
+
+[profile.dev]
+panic = "abort"
+opt-level = 0
+rustflags = "-C link-arg=-nostartfiles"
+
+[profile.release]
+panic = "abort"
+opt-level = 'z'
+lto = true
+rustflags = "-C link-arg=-nostartfiles"

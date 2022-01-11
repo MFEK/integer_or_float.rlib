@@ -1,3 +1,4 @@
+use core::fmt;
 use core::str::FromStr;
 
 use super::IntegerOrFloat::{self, *};
@@ -19,12 +20,20 @@ impl ToString for IntegerOrFloat {
     }
 }
 
+#[cfg(no_std)]
+impl fmt::Display for IntegerOrFloat {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
+        match self {
+            IntegerOrFloat::Float(f) => f.fmt(formatter),
+            IntegerOrFloat::Integer(i) => i.fmt(formatter)
+        }
+    }
+}
+
 #[cfg(std)]
 use std::error::Error;
-#[cfg(not(std))]
+#[cfg(no_std)]
 trait Error {}
-
-use core::fmt;
 
 #[derive(Debug, PartialEq)]
 pub enum ConversionError {

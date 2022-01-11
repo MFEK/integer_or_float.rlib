@@ -1,6 +1,7 @@
-use integer_or_float::{IntegerOrFloat, encode::*};
+#![cfg(feature = "hash")]
+
+use integer_or_float::IntegerOrFloat;
 use IntegerOrFloat::*;
-use num_traits::Float;
 
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hasher as _, Hash as _};
@@ -37,12 +38,6 @@ fn test_hashes() {
 
     test_hash_eq((Float(1.0) + f64::EPSILON, Float(1.0)));
     test_hash_ne((Float(1.0) + f32::EPSILON, Float(1.0)));
-}
-
-#[test]
-fn test_enc_inequality() {
-    assert!(f32::from_encoded(f32::NAN.integer_decode()) != f32::NAN);
-    assert!(f32::from_encoded(f32::INFINITY.integer_decode()) == f32::INFINITY);
 }
 
 #[should_panic]
