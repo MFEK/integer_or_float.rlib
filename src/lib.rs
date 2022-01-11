@@ -2,6 +2,9 @@
 #[cfg(feature = "default")]
 use serde::{Serialize, Deserialize};
 
+#[cfg(feature = "hash")]
+mod hash;
+
 /// The UFO data type "integer or float".
 #[cfg_attr(feature = "default", derive(Serialize, Deserialize))]
 #[derive(Debug, Copy, Clone, PartialEq)]
