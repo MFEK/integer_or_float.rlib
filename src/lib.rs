@@ -1,5 +1,5 @@
 //! This is a Rust implementation of the UFO data type "integer or float".
-#![cfg_attr(all(feature = "no_std", not(any(test, doctest))), no_std)]
+#![cfg_attr(no_std, no_std)]
 
 #[cfg(feature = "serde")]
 use serde::{Serialize, Deserialize};
@@ -7,8 +7,8 @@ use serde::{Serialize, Deserialize};
 #[cfg(feature = "hash")]
 mod hash;
 
+#[cfg(feature = "num-traits")]
 mod encode;
-pub use encode::FromEncoded;
 mod str_conv;
 pub use str_conv::ConversionError;
 

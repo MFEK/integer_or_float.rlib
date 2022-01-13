@@ -1,5 +1,4 @@
 use core::hash::{Hash, Hasher};
-use num_traits::float::FloatCore as _;
 
 use super::IntegerOrFloat::{self, *};
 
@@ -11,8 +10,8 @@ impl Hash for IntegerOrFloat {
                 if f.is_nan() {
                     panic!("Cannot hash a NaN")
                 }
-                let mest = f.integer_decode();
-                mest.hash(state)
+                let u64_f = f.to_bits();
+                u64_f.hash(state)
             }
         }
     }

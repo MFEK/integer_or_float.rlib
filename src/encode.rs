@@ -1,45 +1,42 @@
-#[cfg(feature = "no_std")]
-use micromath::F32Ext as _;
-#[cfg(feature = "no_std")]
-macro_rules! _f64 {
-    () => (f32)
-}
-#[cfg(not(feature = "no_std"))]
-macro_rules! _f64 {
-    () => (f64)
+#[cfg(feature = "log")]
+use log;
+
+use super::IntegerOrFloat::{self, Integer};
+
+use num_traits::*;
+
+impl Zero for IntegerOrFloat {
+    fn zero() -> Self {
+        Integer(0)
+    }
+    fn is_zero(&self) -> bool {
+        *self == Integer(0)
+    }
 }
 
-fn powf(a: _f64!(), b: _f64!()) -> _f64!() {
-    (a as _f64!()).powf(b as _f64!())
+impl One for IntegerOrFloat {
+    fn one() -> Self {
+        Integer(1)
+    }
+    fn is_one(&self) -> bool {
+        *self == Integer(1)
+    }
 }
 
-pub type MantissaExpSignTriplet = (u64, i16, i8);
-pub trait IntegerEncode {
-    fn integer_encode(mest: MantissaExpSignTriplet) -> _f64!() {
-        let (mantissa, exponent, sign) = mest;
-        let sign_f = sign as _f64!();
-        let mantissa_f = mantissa as _f64!();
-        let exponent_f = exponent as _f64!();
-        let exponent_2f = powf(2.0, exponent_f);
-        sign_f * mantissa_f * exponent_2f
-    }   
-}
-impl IntegerEncode for MantissaExpSignTriplet {}
-
-pub trait FromEncoded: Copy {
-    fn from_encoded(mest: impl Into<MantissaExpSignTriplet>) -> Self;
-}
-
-macro_rules! impl_from_encoded {
-    ($type:ident) => {
-        impl FromEncoded for $type {
-            fn from_encoded(mest: impl Into<MantissaExpSignTriplet>) -> Self {
-                MantissaExpSignTriplet::integer_encode(mest.into()) as $type
+impl IntegerOrFloat {
+    pub fn from_bits(bits: impl Into<u32>) -> Self {
+        Self::Float(f32::from_bits(bits.into()))
+    }
+    pub fn to_bits(&self) -> u32 {
+        match self {
+            IntegerOrFloat::Float(f) => {
+                f.to_bits()
+            }
+            IntegerOrFloat::Integer(i) => {
+                #[cfg(feature = "log")]
+                log::warn!("Calling to_bits(…) on an integer to encode it as a float is almost certainly not what you want.");
+                (*i as f32).to_bits()
             }
         }
     }
 }
-
-impl_from_encoded!(f32);
-#[cfg(not(feature = "no_std"))]
-impl_from_encoded!(f64);
