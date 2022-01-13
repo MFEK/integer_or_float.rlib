@@ -33,4 +33,10 @@ fn main() {
     } else {
         rustc_cfg!("std");
     }
+    if cfg!(any(feature = "serde", feature = "default")) {
+        rustc_cfg!("use_serde");
+    }
+    if cfg!(feature = "hash") {
+        rustc_cfg!("with_impl_hash");
+    }
 }

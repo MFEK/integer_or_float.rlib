@@ -1,10 +1,9 @@
 //! This is a Rust implementation of the UFO data type "integer or float".
 #![cfg_attr(no_std, no_std)]
 
-#[cfg(feature = "serde")]
-use serde::{Serialize, Deserialize};
+#[macro_use] extern crate derive_more;
 
-#[cfg(feature = "hash")]
+#[cfg(with_impl_hash)]
 mod hash;
 
 mod cmp;
@@ -14,13 +13,30 @@ mod str_conv;
 pub use str_conv::ConversionError;
 
 /// The UFO data type "integer or float".
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[cfg_attr(use_serde, derive(serde::Serialize, serde::Deserialize))]
+#[derive(Copy, Clone)]
 pub enum IntegerOrFloat {
     Integer(i32),
     Float(f32)
 }
 pub use IntegerOrFloat::{Integer, Float};
+/// The UFO data type "negative integer or float".
+#[cfg_attr(use_serde, derive(serde::Serialize, serde::Deserialize))]
+#[derive(Copy, Clone, Display, Debug, Deref, DerefMut, AsRef, AsMut)]
+#[display(fmt = "{}", inner)]
+pub struct Negative {
+    inner: IntegerOrFloat
+}
+
+impl Negative {
+    pub fn new(iof: impl Into<IntegerOrFloat>) -> Self {
+        let mut inner = iof.into();
+        if !(f32::from(inner)).is_sign_negative() {
+            inner = inner * Float(-1.0);
+        }
+        Self { inner }
+    }
+}
 
 impl Default for IntegerOrFloat {
     fn default() -> Self {
