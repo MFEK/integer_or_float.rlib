@@ -1,3 +1,5 @@
+#![cfg(feature = "num-traits")]
+
 use integer_or_float::IntegerOrFloat::{self, *};
 use num_traits::float::FloatCore;
 #[test]
