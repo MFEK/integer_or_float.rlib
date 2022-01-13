@@ -1,7 +1,4 @@
-#![cfg(feature = "num-traits")]
-
-use integer_or_float::IntegerOrFloat::{self, *};
-use num_traits::float::FloatCore;
+use integer_or_float::IntegerOrFloat::{self};
 #[test]
 fn test_encode() {
     eprintln!("{:b}", f32::NAN.to_bits());
@@ -10,7 +7,7 @@ fn test_encode() {
     assert!(f32::from_bits(0b1111111110000000000000000000000).is_nan());
     assert_eq!(f32::INFINITY, f32::from_bits(0b1111111100000000000000000000000));
     assert_eq!(0.1, f32::from_bits(0b0111101110011001100110011001101));
-    assert!(IntegerOrFloat::from_bits(0b1111111110000000000000000000000).is_nan());
-    assert_eq!(f32::INFINITY, IntegerOrFloat::from_bits(0b1111111100000000000000000000000));
-    assert_eq!(0.1, IntegerOrFloat::from_bits(0b0111101110011001100110011001101));
+    assert!(f32::from(IntegerOrFloat::from_bits(0b1111111110000000000000000000000)).is_nan());
+    assert_eq!(f32::INFINITY, f32::from(IntegerOrFloat::from_bits(0b1111111100000000000000000000000)));
+    assert_eq!(0.1, f32::from(IntegerOrFloat::from_bits(0b0111101110011001100110011001101)));
 }

@@ -7,8 +7,9 @@
 mod hash;
 
 mod cmp;
-#[cfg(feature = "num-traits")]
 mod encode;
+#[cfg(feature = "num-traits")]
+mod num_traits_impl;
 mod str_conv;
 pub use str_conv::ConversionError;
 
@@ -240,21 +241,5 @@ impl Neg for IntegerOrFloat {
     type Output = Self;
     fn neg(self) -> Self::Output {
         self * -1
-    }
-}
-
-#[cfg(feature = "num_traits")]
-impl num_traits::cast::ToPrimitive for IntegerOrFloat {
-    fn to_u64(&self) -> Option<u64> {
-        match self {
-            Integer(i) => i.to_u64(),
-            Float(f) => f.to_u64()
-        }
-    }
-    fn to_i64(&self) -> Option<i64> {
-        match self {
-            Integer(i) => i.to_i64(),
-            Float(f) => f.to_i64()
-        }
     }
 }
