@@ -7,6 +7,7 @@ use serde::{Serialize, Deserialize};
 #[cfg(feature = "hash")]
 mod hash;
 
+mod cmp;
 #[cfg(feature = "num-traits")]
 mod encode;
 mod str_conv;
@@ -154,7 +155,7 @@ macro_rules! impl_from_integer_for_iof {
 
         impl From<$integer_type> for IntegerOrFloat {
             fn from(p: $integer_type) -> Self {
-                IntegerOrFloat::Integer(p as i32)
+                IntegerOrFloat::Integer(i32::try_from(p).unwrap())
             }
         }
 
@@ -223,5 +224,21 @@ impl Neg for IntegerOrFloat {
     type Output = Self;
     fn neg(self) -> Self::Output {
         self * -1
+    }
+}
+
+#[cfg(feature = "num_traits")]
+impl num_traits::cast::ToPrimitive for IntegerOrFloat {
+    fn to_u64(&self) -> Option<u64> {
+        match self {
+            Integer(i) => i.to_u64(),
+            Float(f) => f.to_u64()
+        }
+    }
+    fn to_i64(&self) -> Option<i64> {
+        match self {
+            Integer(i) => i.to_i64(),
+            Float(f) => f.to_i64()
+        }
     }
 }
