@@ -13,14 +13,8 @@ impl From<IntegerOrFloat> for String {
     }
 }
 
-#[cfg(std)]
-impl ToString for IntegerOrFloat {
-    fn to_string(&self) -> String {
-        String::from(*self)
-    }
-}
-
-#[cfg(no_std)]
+// this implements ToString iff feature(alloc), which has:
+// impl<T> ToString for T where T: std::fmt::Display, T: ?Sized { … };
 impl fmt::Display for IntegerOrFloat {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
         match self {
@@ -30,12 +24,26 @@ impl fmt::Display for IntegerOrFloat {
     }
 }
 
+impl fmt::Debug for IntegerOrFloat {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
+        match self {
+            IntegerOrFloat::Float(f) => {
+                formatter.write_fmt(format_args!("Float({})", f))
+            }
+            IntegerOrFloat::Integer(i) => {
+                formatter.write_fmt(format_args!("Integer({})", i))
+            }
+        }
+    }
+}
+
 #[cfg(std)]
 use std::error::Error;
 #[cfg(no_std)]
 trait Error {}
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ConversionError {
     IntegerConversionError,
     FloatConversionError
@@ -69,6 +77,31 @@ impl TryFrom<&str> for IntegerOrFloat {
                     Err(FloatConversionError)
                 }
             }
+        }
+    }
+}
+
+#[cfg(feature = "num-traits")]
+impl From<num_traits::ParseFloatError> for ConversionError {
+    fn from(_: num_traits::ParseFloatError) -> Self {
+        ConversionError::FloatConversionError
+    }
+}
+
+impl From<core::num::ParseIntError> for ConversionError {
+    fn from(_: core::num::ParseIntError) -> Self {
+        ConversionError::IntegerConversionError
+    }
+}
+
+#[cfg(feature = "num-traits")]
+impl num_traits::Num for IntegerOrFloat {
+    type FromStrRadixErr = ConversionError;
+    fn from_str_radix(s: &str, radix: u32) -> Result<Self, Self::FromStrRadixErr> {
+        if s.contains('.') {
+            Ok(Integer(i32::from_str_radix(s, radix)?))
+        } else {
+            Ok(Float(f32::from_str_radix(s, radix)?))
         }
     }
 }
