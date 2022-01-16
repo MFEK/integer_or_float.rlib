@@ -1,3 +1,5 @@
+#![cfg(feature = "float-cmp")]
+
 use integer_or_float::IntegerOrFloat::{self, *};
 use float_cmp::{ApproxEq, F32Margin};
 
