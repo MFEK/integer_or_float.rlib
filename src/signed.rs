@@ -1,6 +1,6 @@
 use super::IntegerOrFloat::{self, *};
 #[allow(unused_imports)]
-use super::{i_iof, f_iof};
+use super::{f_iof, i_iof};
 
 /// A generic container for a "negative integer or a float".
 ///
@@ -9,7 +9,7 @@ use super::{i_iof, f_iof};
 #[derive(Copy, Clone, Display, Debug, Deref, DerefMut, AsRef, AsMut)]
 #[display(fmt = "{}", inner)]
 pub struct Negative {
-    inner: IntegerOrFloat
+    inner: IntegerOrFloat,
 }
 
 impl Negative {
@@ -22,13 +22,12 @@ impl Negative {
     }
 }
 
-
 /// A generic container for a "positive integer or a float".
 #[cfg_attr(use_serde, derive(serde::Serialize, serde::Deserialize))]
 #[derive(Copy, Clone, Display, Debug, Deref, DerefMut, AsRef, AsMut)]
 #[display(fmt = "{}", inner)]
 pub struct Positive {
-    inner: IntegerOrFloat
+    inner: IntegerOrFloat,
 }
 
 impl Positive {

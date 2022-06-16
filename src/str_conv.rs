@@ -1,15 +1,15 @@
 use core::fmt;
 use core::str::FromStr;
 
-use crate::{f_iof, i_iof};
 use super::IntegerOrFloat::{self, *};
+use crate::{f_iof, i_iof};
 
 #[cfg(std)]
 impl From<IntegerOrFloat> for String {
     fn from(iof: IntegerOrFloat) -> Self {
         match iof {
             IntegerOrFloat::Float(f) => f.to_string(),
-            IntegerOrFloat::Integer(i) => i.to_string()
+            IntegerOrFloat::Integer(i) => i.to_string(),
         }
     }
 }
@@ -20,7 +20,7 @@ impl fmt::Display for IntegerOrFloat {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
         match self {
             IntegerOrFloat::Float(f) => f.fmt(formatter),
-            IntegerOrFloat::Integer(i) => i.fmt(formatter)
+            IntegerOrFloat::Integer(i) => i.fmt(formatter),
         }
     }
 }
@@ -28,12 +28,8 @@ impl fmt::Display for IntegerOrFloat {
 impl fmt::Debug for IntegerOrFloat {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
         match self {
-            IntegerOrFloat::Float(f) => {
-                formatter.write_fmt(format_args!("Float({})", f))
-            }
-            IntegerOrFloat::Integer(i) => {
-                formatter.write_fmt(format_args!("Integer({})", i))
-            }
+            IntegerOrFloat::Float(f) => formatter.write_fmt(format_args!("Float({})", f)),
+            IntegerOrFloat::Integer(i) => formatter.write_fmt(format_args!("Integer({})", i)),
         }
     }
 }
@@ -47,7 +43,7 @@ trait Error {}
 #[non_exhaustive]
 pub enum ConversionError {
     IntegerConversionError,
-    FloatConversionError
+    FloatConversionError,
 }
 
 use ConversionError::*;
@@ -55,7 +51,7 @@ impl fmt::Display for ConversionError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             IntegerConversionError => write!(f, "String not an integer"),
-            FloatConversionError => write!(f, "String not a floating point number")
+            FloatConversionError => write!(f, "String not a floating point number"),
         }
     }
 }

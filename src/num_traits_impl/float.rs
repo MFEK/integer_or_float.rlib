@@ -1,8 +1,9 @@
-use core::num::FpCategory;
-use crate::IntegerOrFloat as IOF;
-use num_traits::Float;
 use crate::f_iof;
+use crate::IntegerOrFloat as IOF;
+use core::num::FpCategory;
+use num_traits::Float;
 
+#[rustfmt::skip]
 impl Float for IOF {
     // Statics
     fn nan() -> Self { IOF::Float(f_iof::NAN) }

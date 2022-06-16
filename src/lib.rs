@@ -5,11 +5,11 @@
 #![cfg_attr(no_std, no_std)]
 
 mod impl_from;
-mod impl_ops;
 mod impl_misc;
+mod impl_ops;
 
 pub mod backing_types;
-pub use backing_types::{i_iof, f_iof, u_iof};
+pub use backing_types::{f_iof, i_iof, u_iof};
 
 #[cfg(with_impl_hash)]
 mod hash;
@@ -28,6 +28,6 @@ pub use str_conv::ConversionError;
 #[derive(Copy, Clone)]
 pub enum IntegerOrFloat {
     Integer(i_iof),
-    Float(f_iof)
+    Float(f_iof),
 }
-pub use IntegerOrFloat::{Integer, Float};
+pub use IntegerOrFloat::{Float, Integer};

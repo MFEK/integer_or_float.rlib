@@ -1,5 +1,5 @@
-use crate::f_iof;
 use super::IntegerOrFloat::{self, *};
+use crate::f_iof;
 
 use num_traits;
 
@@ -10,13 +10,13 @@ impl num_traits::cast::ToPrimitive for IntegerOrFloat {
     fn to_u64(&self) -> Option<u64> {
         match self {
             Integer(i) => i.to_u64(),
-            Float(f) => f.to_u64()
+            Float(f) => f.to_u64(),
         }
     }
     fn to_i64(&self) -> Option<i64> {
         match self {
             Integer(i) => i.to_i64(),
-            Float(f) => f.to_i64()
+            Float(f) => f.to_i64(),
         }
     }
 }
@@ -41,6 +41,6 @@ impl num_traits::One for IntegerOrFloat {
 
 impl num_traits::NumCast for IntegerOrFloat {
     fn from<N: num_traits::ToPrimitive>(num: N) -> Option<IntegerOrFloat> {
-        num.to_f64().map(|n|IntegerOrFloat::Float(n as f_iof))
+        num.to_f64().map(|n| IntegerOrFloat::Float(n as f_iof))
     }
 }
