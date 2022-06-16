@@ -40,6 +40,6 @@ fn main() {
         rustc_cfg!("with_impl_hash");
     }
     if cfg!(feature = "x64-backing-store") {
-        eprintln!("Warning: compiling f64/i64 as IntegerOrFloat backing type. This won't work with most MFEK libraries/programs, and is meant for non-MFEK consumers.");
+        cargo_emit::warning!("Warning: compiling f64/i64 as IntegerOrFloat backing type. This won't work with most MFEK libraries/programs, and is meant for non-MFEK consumers.");
     }
 }
