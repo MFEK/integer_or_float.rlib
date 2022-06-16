@@ -26,5 +26,6 @@ indoc = "1.0"
 [features]
 hash = []
 default = ["serde", "serde/std", "serde/default", "float-cmp", "float-cmp/std", "num-traits", "num-traits/std"]
+x64-backing-store = []
 
 ignore_no_std_tests_check = []

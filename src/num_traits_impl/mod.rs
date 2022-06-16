@@ -1,3 +1,4 @@
+use crate::f_iof;
 use super::IntegerOrFloat::{self, *};
 
 use num_traits;
@@ -40,6 +41,6 @@ impl num_traits::One for IntegerOrFloat {
 
 impl num_traits::NumCast for IntegerOrFloat {
     fn from<N: num_traits::ToPrimitive>(num: N) -> Option<IntegerOrFloat> {
-        num.to_f32().map(|n|IntegerOrFloat::Float(n))
+        num.to_f64().map(|n|IntegerOrFloat::Float(n as f_iof))
     }
 }

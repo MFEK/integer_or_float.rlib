@@ -3,6 +3,9 @@
 
 #[macro_use] extern crate derive_more;
 
+pub mod backing_types;
+pub use backing_types::{i_iof, f_iof, u_iof};
+
 #[cfg(with_impl_hash)]
 mod hash;
 
@@ -17,8 +20,8 @@ pub use str_conv::ConversionError;
 #[cfg_attr(use_serde, derive(serde::Serialize, serde::Deserialize))]
 #[derive(Copy, Clone)]
 pub enum IntegerOrFloat {
-    Integer(i32),
-    Float(f32)
+    Integer(i_iof),
+    Float(f_iof)
 }
 pub use IntegerOrFloat::{Integer, Float};
 /// The UFO data type "negative integer or float".
@@ -32,7 +35,7 @@ pub struct Negative {
 impl Negative {
     pub fn new(iof: impl Into<IntegerOrFloat>) -> Self {
         let mut inner = iof.into();
-        if !(f32::from(inner)).is_sign_negative() {
+        if !(f_iof::from(inner)).is_sign_negative() {
             inner = inner * Float(-1.0);
         }
         Self { inner }
@@ -41,7 +44,7 @@ impl Negative {
 
 impl Default for IntegerOrFloat {
     fn default() -> Self {
-        IntegerOrFloat::Float(f32::default())
+        IntegerOrFloat::Float(f_iof::default())
     }
 }
 
@@ -56,10 +59,10 @@ macro_rules! impl_std_ops_iof_iof {
                         IntegerOrFloat::Float(f $op f2)
                     },
                     (IntegerOrFloat::Float(f), IntegerOrFloat::Integer(i2)) => {
-                        IntegerOrFloat::Float(f $op i2 as f32)
+                        IntegerOrFloat::Float(f $op i2 as f_iof)
                     },
                     (IntegerOrFloat::Integer(i), IntegerOrFloat::Float(f2)) => {
-                        IntegerOrFloat::Float(i as f32 $op f2)
+                        IntegerOrFloat::Float(i as f_iof $op f2)
                     },
                     (IntegerOrFloat::Integer(i), IntegerOrFloat::Integer(i2)) => {
                         IntegerOrFloat::Integer(i $op i2)
@@ -79,7 +82,7 @@ macro_rules! impl_std_ops_iof_primitive {
             fn $fn(self, rhs: $rhs) -> Self::Output {
                 match self {
                     IntegerOrFloat::Float(f) => {
-                        IntegerOrFloat::Float(f as f32 $op rhs as f32)
+                        IntegerOrFloat::Float(f as f_iof $op rhs as f_iof)
                     },
                     IntegerOrFloat::Integer(i) => {
                         IntegerOrFloat::$when_int(i as $coerce_i $op rhs as $coerce_i)
@@ -102,7 +105,7 @@ macro_rules! impl_std_ops_primitive_iof {
                         IntegerOrFloat::$when_int(self as $coerce_i $op i as $coerce_i)
                     },
                     IntegerOrFloat::Float(f) => {
-                        IntegerOrFloat::Float(self as f32 $op f)
+                        IntegerOrFloat::Float(self as f_iof $op f)
                     }
                 }
             }
@@ -121,16 +124,16 @@ macro_rules! impl_std_ops_iof_primitive_all {
 
 macro_rules! impl_std_ops_iof_primitives_all {
     ($op:tt, $trait:ident, $fn:ident) => {
-        impl_std_ops_iof_primitive_all!($op, $trait, $fn, (i8, i16, i32, i64, isize), (i32, Integer));
-        impl_std_ops_iof_primitive_all!($op, $trait, $fn, (u8, u16, u32, u64, usize), (i32, Integer));
-        impl_std_ops_iof_primitive_all!($op, $trait, $fn, (f32, f64), (f32, Float));
+        impl_std_ops_iof_primitive_all!($op, $trait, $fn, (i8, i16, i32, i64, isize), (i_iof, Integer));
+        impl_std_ops_iof_primitive_all!($op, $trait, $fn, (u8, u16, u32, u64, usize), (i_iof, Integer));
+        impl_std_ops_iof_primitive_all!($op, $trait, $fn, (f32, f64), (f_iof, Float));
     }
 }
 
 macro_rules! impl_std_ops_integer_iof_all {
     ($op:tt, $trait:ident, $fn:ident, ($($types:ident),+)) => {
         $(
-            impl_std_ops_primitive_iof!($op, $trait, $fn, $types, (i32, Integer));
+            impl_std_ops_primitive_iof!($op, $trait, $fn, $types, (i_iof, Integer));
         )+
     }
 }
@@ -139,8 +142,8 @@ macro_rules! impl_std_ops_primitives_iof_all {
     ($op:tt, $trait:ident, $fn:ident) => {
         impl_std_ops_integer_iof_all!($op, $trait, $fn, (i8, i16, i32, i64, isize));
         impl_std_ops_integer_iof_all!($op, $trait, $fn, (u8, u16, u32, u64, usize));
-        impl_std_ops_primitive_iof!($op, $trait, $fn, f32, (f32, Float));
-        impl_std_ops_primitive_iof!($op, $trait, $fn, f64, (f32, Float));
+        impl_std_ops_primitive_iof!($op, $trait, $fn, f32, (f_iof, Float));
+        impl_std_ops_primitive_iof!($op, $trait, $fn, f64, (f_iof, Float));
     }
 }
 
@@ -172,7 +175,7 @@ macro_rules! impl_from_integer_for_iof {
 
         impl From<$integer_type> for IntegerOrFloat {
             fn from(p: $integer_type) -> Self {
-                IntegerOrFloat::Integer(i32::try_from(p).unwrap())
+                IntegerOrFloat::Integer(i_iof::try_from(p).unwrap())
             }
         }
 
@@ -192,7 +195,7 @@ macro_rules! impl_from_float_for_iof {
 
         impl From<$integer_type> for IntegerOrFloat {
             fn from(p: $integer_type) -> Self {
-                IntegerOrFloat::Float(p as f32)
+                IntegerOrFloat::Float(p as f_iof)
             }
         }
 
