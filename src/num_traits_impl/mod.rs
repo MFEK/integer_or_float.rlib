@@ -2,6 +2,8 @@ use super::IntegerOrFloat::{self, *};
 
 use num_traits;
 
+mod float;
+
 #[cfg(feature = "num-traits")]
 impl num_traits::cast::ToPrimitive for IntegerOrFloat {
     fn to_u64(&self) -> Option<u64> {
@@ -36,3 +38,8 @@ impl num_traits::One for IntegerOrFloat {
     }
 }
 
+impl num_traits::NumCast for IntegerOrFloat {
+    fn from<N: num_traits::ToPrimitive>(num: N) -> Option<IntegerOrFloat> {
+        num.to_f32().map(|n|IntegerOrFloat::Float(n))
+    }
+}
