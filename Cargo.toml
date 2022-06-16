@@ -1,6 +1,6 @@
 [package]
 name = "integer_or_float"
-version = "0.1.2"
+version = "0.1.3"
 authors = ["Fredrick Brennan <copypaste@kittens.ph>"]
 edition = "2021"
 build = "build.rs"
