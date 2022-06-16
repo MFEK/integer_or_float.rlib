@@ -16,7 +16,9 @@ mod num_traits_impl;
 mod str_conv;
 pub use str_conv::ConversionError;
 
-/// The UFO data type "integer or float".
+/// A generic container for an "integer or a float".
+///
+/// Was made originally for the UFO data type "integer or float".
 #[cfg_attr(use_serde, derive(serde::Serialize, serde::Deserialize))]
 #[derive(Copy, Clone)]
 pub enum IntegerOrFloat {
