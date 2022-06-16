@@ -5,12 +5,10 @@ use super::{f_iof, i_iof};
 
 /* Helpers for implementing std ops for primitive numbers and IntegerOrFloat */
 
-///  This helper macro is for implementing std ops for our type and our type.
-///  The `$op` argument is the operator, the `$trait` is the trait, the `$fn` is the
-///  trait method.
+/// This helper macro is for implementing std ops for our type and our type. The `$op` argument is
+/// the operator, the `$trait` is the trait, the `$fn` is the trait method.
 ///
-///  TODO: Maybe use a trait to define the operator, so you don't
-///  have to pass it in as a literal?
+/// TODO: Maybe use a trait to define the operator, so you don't have to pass it in as a literal?
 macro_rules! impl_std_ops_iof_iof {
     ($op:tt, $trait:ident, $fn:ident) => {
 
@@ -37,14 +35,13 @@ macro_rules! impl_std_ops_iof_iof {
     }
 }
 
-/// This helper macro is for implementing std ops for primitive numbers and our type,
-/// where IOF is the Output type.
+/// This helper macro is for implementing std ops for primitive numbers and our type, where IOF is
+/// the Output type.
 ///
-/// The `$op` argument is the operator, the `$trait` is the trait, the `$fn` is the
-/// trait method, `($($types:ident),+)` is a list of the types that this macro
-/// should be implemented for, `$coerce_i` is the type to coerce the integer to
-/// when the output type is an integer, and `$when_int` is the variant of our
-/// enum to use when the output type is an integer.
+/// The `$op` argument is the operator, the `$trait` is the trait, the `$fn` is the trait method,
+/// `($($types:ident),+)` is a list of the types that this macro should be implemented for,
+/// `$coerce_i` is the type to coerce the integer to when the output type is an integer, and
+/// `$when_int` is the variant of our enum to use when the output type is an integer.
 macro_rules! impl_std_ops_iof_primitive {
     ($op:tt, $trait:ident, $fn:ident, $rhs:tt, ($coerce_i:tt, $when_int:ident)) => {
 
@@ -97,7 +94,8 @@ macro_rules! impl_std_ops_iof_primitive_all {
     }
 }
 
-///  This macro is for implementing std ops for all primitive numbers and our type. (our type is output type)
+/// This macro is for implementing std ops for all primitive numbers and our type. (our type is
+/// output type)
 macro_rules! impl_std_ops_iof_primitives_all {
     ($op:tt, $trait:ident, $fn:ident) => {
         impl_std_ops_iof_primitive_all!($op, $trait, $fn, (i8, i16, i32, i64, isize), (i_iof, Integer));
@@ -106,8 +104,8 @@ macro_rules! impl_std_ops_iof_primitives_all {
     };
 }
 
-///  This macro is for implementing std ops for all primitive numbers and our type, where the output
-///  type is our type, except for floats where the output type is just an f32 or f64.
+/// This macro is for implementing std ops for all primitive numbers and our type, where the output
+/// type is our type, except for floats where the output type is just an f32 or f64.
 macro_rules! impl_std_ops_integer_iof_all {
     ($op:tt, $trait:ident, $fn:ident, ($($types:ident),+)) => {
         $(
@@ -116,7 +114,8 @@ macro_rules! impl_std_ops_integer_iof_all {
     }
 }
 
-///  This macro is for implementing std ops for all primitive numbers and our type. (primitive type is output type)
+/// This macro is for implementing std ops for all primitive numbers and our type. (primitive type
+/// is output type)
 macro_rules! impl_std_ops_primitives_iof_all {
     ($op:tt, $trait:ident, $fn:ident) => {
         impl_std_ops_integer_iof_all!($op, $trait, $fn, (i8, i16, i32, i64, isize));

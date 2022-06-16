@@ -1,11 +1,15 @@
 //! impl_from.rs — Helpers for implementing From for primitive numbers and IntegerOrFloat
+
 use super::IntegerOrFloat;
 use super::{f_iof, i_iof};
+
 // Setup
-/// This macro is for implementing the `From` trait for all primitive types and our type. Output is whatever $primitive type requested.
+
+/// This macro is for implementing the `From` trait for all primitive types and our type. Output is
+/// whatever $primitive type requested.
 ///
-/// Because we want to be able to use our type in place of primitive types, we
-/// implement `From` for our type to primitive types.
+/// Because we want to be able to use our type in place of primitive types, we implement `From` for
+/// our type to primitive types.
 macro_rules! impl_from_iof_for_primitive {
     ($primitive:ident) => {
         impl From<IntegerOrFloat> for $primitive {
@@ -18,8 +22,8 @@ macro_rules! impl_from_iof_for_primitive {
         }
     };
 }
-/// This helper macro calls  `impl_from_iof_for_primitive!` (which
-/// implements `From<IOF> for $primitive`) for a list of types.
+/// This helper macro calls  `impl_from_iof_for_primitive!` (which implements `From<IOF> for
+/// $primitive`) for a list of types.
 macro_rules! impl_from_iof_for_primitives_all {
     ($($primitive:ident),+) => {
         $(
@@ -27,8 +31,8 @@ macro_rules! impl_from_iof_for_primitives_all {
         )+
     }
 }
-/// This helper macro implements `From<$primitive> for IOF` (where `IOF` is
-/// whatever type is passed to the macro) for integer types.
+/// This helper macro implements `From<$primitive> for IOF` (where `IOF` is whatever type is passed
+/// to the macro) for integer types.
 macro_rules! impl_from_integer_for_iof {
     ($integer_type:ident) => {
         impl From<$integer_type> for IntegerOrFloat {
@@ -38,9 +42,8 @@ macro_rules! impl_from_integer_for_iof {
         }
     };
 }
-/// This helper macro calls `impl_from_integer_for_iof!` (which
-/// implements `From<$integer_type> for IOF`) for a list of types.
-/// It's used for implementing the `From<IntegerType> for IntegerOrFloat
+/// This helper macro calls `impl_from_integer_for_iof!` (which implements `From<$integer_type> for
+/// IOF`) for a list of types. It's used for implementing the `From<IntegerType> for IntegerOrFloat
 /// for all integer types.
 macro_rules! impl_from_integer_for_iof_all {
     ($($primitive:ident),+) => {
@@ -49,10 +52,9 @@ macro_rules! impl_from_integer_for_iof_all {
         )+
     }
 }
-/// This helper macro implements `From<$primitive> for IOF` (where `IOF` is
-/// whatever type is passed to the macro) for float types.
-macro_rules! impl_from_float_for_iof {
-    ($integer_type:ident) => {
+/// This helper macro implements `From<$primitive> for IOF` (where `IOF` is whatever type is passed
+/// to the macro) for float types.
+macro_rules! impl_from_float_for_iof { ($integer_type:ident) => {
         impl From<$integer_type> for IntegerOrFloat {
             fn from(p: $integer_type) -> Self {
                 IntegerOrFloat::Float(p as f_iof)
@@ -60,10 +62,9 @@ macro_rules! impl_from_float_for_iof {
         }
     };
 }
-/// This helper macro calls `impl_from_float_for_iof!` (which
-/// implements `From<$primitive> for IOF`) for a list of types.
-/// It's used for implementing the `From<$float> for IntegerOrFloat`
-/// for all float types (currently only f32 and f64).
+/// This helper macro calls `impl_from_float_for_iof!` (which implements `From<$primitive> for
+/// IOF`) for a list of types. It's used for implementing the `From<$float> for IntegerOrFloat` for
+/// all float types (currently only f32 and f64).
 macro_rules! impl_from_float_for_iof_all {
     ($($primitive:ident),+) => {
         $(
