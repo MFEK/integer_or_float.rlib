@@ -1,13 +1,14 @@
 [package]
 name = "integer_or_float"
-version = "0.1.5"
+version = "0.1.5-1"
 authors = ["Fredrick Brennan <copypaste@kittens.ph>"]
 edition = "2021"
-description = "A data type holding an 'integer or float' (for UFO spec)"
 build = "build.rs"
 # crates.io
+description = "A data type holding an 'integer or float' (for UFO spec)"
 license = "Apache-2.0"
 keywords = ["types", "ufo", "font-format", "glif", "no-std"]
+repository = "https://github.com/MFEK/integer_or_float.rlibhttps://github.com/MFEK/integer_or_float.rlib"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

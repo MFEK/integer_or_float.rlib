@@ -1,4 +1,4 @@
-# `integer_or_float` v0.1.4
+# `integer_or_float` v0.1.5
 
 This is a Rust type that holds an integer or a float.
 
