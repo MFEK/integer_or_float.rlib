@@ -24,7 +24,7 @@ pub use str_conv::ConversionError;
 /// A generic container for an "integer or a float".
 ///
 /// Was made originally for the UFO data type "integer or float".
-#[cfg_attr(use_serde, derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "more-serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Copy, Clone)]
 pub enum IntegerOrFloat {
     Integer(i_iof),

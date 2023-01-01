@@ -1,12 +1,11 @@
 use super::IntegerOrFloat::{self, *};
 use crate::f_iof;
-
-use num_traits;
+use num_traits::{cast::ToPrimitive, Zero, One, NumCast};
 
 mod float;
 
 #[cfg(feature = "num-traits")]
-impl num_traits::cast::ToPrimitive for IntegerOrFloat {
+impl ToPrimitive for IntegerOrFloat {
     fn to_u64(&self) -> Option<u64> {
         match self {
             Integer(i) => i.to_u64(),
@@ -21,7 +20,7 @@ impl num_traits::cast::ToPrimitive for IntegerOrFloat {
     }
 }
 
-impl num_traits::Zero for IntegerOrFloat {
+impl Zero for IntegerOrFloat {
     fn zero() -> Self {
         Integer(0)
     }
@@ -30,7 +29,7 @@ impl num_traits::Zero for IntegerOrFloat {
     }
 }
 
-impl num_traits::One for IntegerOrFloat {
+impl One for IntegerOrFloat {
     fn one() -> Self {
         Integer(1)
     }
@@ -39,8 +38,8 @@ impl num_traits::One for IntegerOrFloat {
     }
 }
 
-impl num_traits::NumCast for IntegerOrFloat {
-    fn from<N: num_traits::ToPrimitive>(num: N) -> Option<IntegerOrFloat> {
+impl NumCast for IntegerOrFloat {
+    fn from<N: ToPrimitive>(num: N) -> Option<IntegerOrFloat> {
         num.to_f64().map(|n| IntegerOrFloat::Float(n as f_iof))
     }
 }

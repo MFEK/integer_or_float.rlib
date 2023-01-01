@@ -5,7 +5,7 @@ use super::{f_iof, i_iof};
 /// A generic container for a "negative integer or a float".
 ///
 /// Was made originally for the UFO data type "negative integer or float".
-#[cfg_attr(use_serde, derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "more-serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Copy, Clone, Display, Debug, Deref, DerefMut, AsRef, AsMut)]
 #[display(fmt = "{}", inner)]
 pub struct Negative {
@@ -23,7 +23,7 @@ impl Negative {
 }
 
 /// A generic container for a "positive integer or a float".
-#[cfg_attr(use_serde, derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "more-serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Copy, Clone, Display, Debug, Deref, DerefMut, AsRef, AsMut)]
 #[display(fmt = "{}", inner)]
 pub struct Positive {

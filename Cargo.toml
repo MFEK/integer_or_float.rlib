@@ -25,9 +25,15 @@ cfg-if = "1.0"
 cargo-emit = "0.2"
 indoc = "1.0"
 
+[dev-dependencies]
+serde_json = "1.0"
+
 [features]
-hash = []
-default = ["serde", "serde/std", "serde/default", "float-cmp", "float-cmp/std", "num-traits", "num-traits/std"]
+numerical-traits = ["float-cmp", "float-cmp/std", "num-traits", "num-traits/std"]
+more-serde = ["serde", "serde/std", "serde/default"]
+default = ["numerical-traits"]
+fat = ["more-serde", "default"]
 x64-backing-store = []
 
+hash = []
 ignore_no_std_tests_check = []
