@@ -5,10 +5,10 @@ authors = ["Fredrick Brennan <copypaste@kittens.ph>"]
 edition = "2021"
 build = "build.rs"
 # crates.io
-description = "A data type holding an 'integer or float' (for UFO spec)"
+description = "A data type holding an ‘integer or float’ (a data type in the Unified Font Object specification, among others)"
 license = "Apache-2.0"
 keywords = ["types", "ufo", "font-format", "glif", "no-std"]
-repository = "https://github.com/MFEK/integer_or_float.rlibhttps://github.com/MFEK/integer_or_float.rlib"
+repository = "https://github.com/MFEK/integer_or_float.rlib"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -18,6 +18,7 @@ serde = { version = "1.0", default-features = false, features = ["derive"], opti
 num-traits = { version = "0.2", default-features = false, optional = true }
 log = { version = "0.4", optional = true }
 derive_more = { version = "0.99" }
+ryu = { version = "1.0", optional = true }
 
 [build-dependencies]
 autocfg = "1.0"
@@ -30,9 +31,10 @@ serde_json = "1.0"
 
 [features]
 numerical-traits = ["float-cmp", "float-cmp/std", "num-traits", "num-traits/std"]
+faster-strconv = ["ryu"]
 more-serde = ["serde", "serde/std", "serde/default"]
 default = ["numerical-traits"]
-fat = ["more-serde", "default"]
+fat = ["more-serde", "faster-strconv", "default"]
 x64-backing-store = []
 
 hash = []

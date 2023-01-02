@@ -2,13 +2,21 @@ use core::fmt;
 use core::str::FromStr;
 
 use super::IntegerOrFloat::{self, *};
+use crate::ConversionError as IofConversionError;
+
+type ConversionError = IofConversionError<core::num::ParseFloatError>;
+
 use crate::{f_iof, i_iof};
+
+#[macro_use]
+mod ryu;
+use maybe as maybe_ryu;
 
 #[cfg(std)]
 impl From<IntegerOrFloat> for String {
     fn from(iof: IntegerOrFloat) -> Self {
         match iof {
-            IntegerOrFloat::Float(f) => f.to_string(),
+            IntegerOrFloat::Float(f) => { maybe_ryu!(f) },
             IntegerOrFloat::Integer(i) => i.to_string(),
         }
     }
@@ -34,60 +42,19 @@ impl fmt::Debug for IntegerOrFloat {
     }
 }
 
-#[cfg(std)]
-use std::error::Error;
-#[cfg(no_std)]
-trait Error {}
-
-#[derive(Debug, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ConversionError {
-    IntegerConversionError,
-    FloatConversionError,
-}
-
-use ConversionError::*;
-impl fmt::Display for ConversionError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            IntegerConversionError => write!(f, "String not an integer"),
-            FloatConversionError => write!(f, "String not a floating point number"),
-        }
-    }
-}
-
-impl Error for ConversionError {}
-
 use core::convert::TryFrom;
 impl TryFrom<&str> for IntegerOrFloat {
     type Error = ConversionError;
     fn try_from(s: &str) -> Result<Self, Self::Error> {
-        if let Ok(i) = s.parse::<i_iof>() {
-            Ok(Integer(i))
-        } else {
-            if let Ok(f) = s.parse::<f_iof>() {
-                Ok(Float(f))
-            } else {
-                if !s.contains('.') {
-                    Err(IntegerConversionError)
-                } else {
-                    Err(FloatConversionError)
+        match s.parse::<i_iof>() {
+            Ok(i) => Ok(Integer(i)),
+            Err(ice) => {
+                match s.parse::<f_iof>() {
+                    Ok(f) => Ok(Float(f)),
+                    Err(fce) => Err(ConversionError::kind_for_string(s, ice, fce))
                 }
             }
         }
-    }
-}
-
-#[cfg(feature = "num-traits")]
-impl From<num_traits::ParseFloatError> for ConversionError {
-    fn from(_: num_traits::ParseFloatError) -> Self {
-        ConversionError::FloatConversionError
-    }
-}
-
-impl From<core::num::ParseIntError> for ConversionError {
-    fn from(_: core::num::ParseIntError) -> Self {
-        ConversionError::IntegerConversionError
     }
 }
 
@@ -96,9 +63,9 @@ impl num_traits::Num for IntegerOrFloat {
     type FromStrRadixErr = ConversionError;
     fn from_str_radix(s: &str, radix: u32) -> Result<Self, Self::FromStrRadixErr> {
         if s.contains('.') {
-            Ok(Integer(i_iof::from_str_radix(s, radix)?))
-        } else {
             Ok(Float(f_iof::from_str_radix(s, radix)?))
+        } else {
+            Ok(Integer(i_iof::from_str_radix(s, radix)?))
         }
     }
 }

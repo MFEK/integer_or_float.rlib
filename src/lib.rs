@@ -16,10 +16,13 @@ mod hash;
 
 mod cmp;
 mod encode;
+
 #[cfg(feature = "num-traits")]
 mod num_traits_impl;
+
 mod str_conv;
-pub use str_conv::ConversionError;
+pub mod error;
+pub use error::ConversionError;
 
 /// A generic container for an "integer or a float".
 ///

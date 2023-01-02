@@ -63,6 +63,7 @@ dependencies = [
  "indoc",
  "log",
  "num-traits",
+ "ryu",
  "serde",
  "serde_json",
 ]
