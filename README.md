@@ -1,4 +1,4 @@
-# `integer_or_float` v0.2.0
+# `integer_or_float` v0.3.0
 
 <div align="center">
   <a href="https://docs.rs/integer_or_float">
@@ -54,6 +54,9 @@ Enables serde with `serde/std`.
 
 ### `numerical-traits`
 Enables `float-cmp` and `num-traits` crates, which provide `::ApproxEq` and `::{cast::ToPrimitive, Zero, One, NumCast}` respectively.
+
+### `faster-strconv`
+Enables [_Ryū_ (龍)](https://crates.io/crates/ryu), for faster float→string conversions.
 
 ### `default`
 As of v0.2, an alias for `numerical-traits`. This is a breaking change from v0.1, serde no longer default!
