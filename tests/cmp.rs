@@ -1,4 +1,5 @@
 #![cfg(feature = "float-cmp")]
+#![cfg(not(feature = "x64-backing-store"))]
 
 use integer_or_float::IntegerOrFloat::{self, *};
 use float_cmp::{ApproxEq, F32Margin};
