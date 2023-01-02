@@ -1,4 +1,7 @@
+#![cfg(not(feature = "x64-backing-store"))]
+
 use integer_or_float::IntegerOrFloat::{self};
+
 #[test]
 fn test_encode() {
     eprintln!("{:b}", f32::NAN.to_bits());
