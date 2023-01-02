@@ -1,4 +1,4 @@
-# `integer_or_float` v0.3.0
+# `integer_or_float` v0.3.1
 
 <div align="center">
   <a href="https://docs.rs/integer_or_float">
@@ -66,6 +66,7 @@ As of v0.2, enables all.
 
 # License
 
+```plain
     Copyright 2022 Fredrick R. Brennan <copypaste@kittens.ph>
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -79,3 +80,4 @@ As of v0.2, enables all.
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
+```

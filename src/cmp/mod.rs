@@ -7,6 +7,7 @@ use super::{IntegerOrFloat, *};
 use crate::{f_iof, i_iof};
 
 impl IntegerOrFloat {
+    /// If we're holding an integer return it, else return in the [`Err`] variant our float.
     pub fn holding_integer(&self) -> Result<i_iof, f_iof> {
         match self {
             Integer(i) => Ok(*i),
@@ -14,6 +15,7 @@ impl IntegerOrFloat {
         }
     }
 
+    /// If we're holding a float return it, else return in the [`Err`] variant our integer.
     pub fn holding_float(&self) -> Result<f_iof, i_iof> {
         match self {
             Integer(i) => Err(*i),
@@ -29,7 +31,7 @@ impl IntegerOrFloat {
         }
     }
 
-    /// Give back the float we're holding…panic if we're holding an integer.
+    /// Give back the integer we're holding…panic if we're holding a float.
     pub fn unwrap_integer(&self) -> i_iof {
         match self.holding_integer() {
             Ok(i) => i,

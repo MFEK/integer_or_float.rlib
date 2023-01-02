@@ -1,8 +1,7 @@
-//! This is a Rust type that holds an integer or a float.
-//!
-//! Before v1.4 (June 2022), it mostly focused on the UFO data type "integer or float", but is now
-//! generic.
+#![doc = include_str!("../README.md")]
+
 #![cfg_attr(no_std, no_std)]
+#![warn(missing_docs)]
 
 mod impl_from;
 mod impl_misc;
@@ -30,7 +29,11 @@ pub use error::ConversionError;
 #[cfg_attr(feature = "more-serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Copy, Clone)]
 pub enum IntegerOrFloat {
+    /// An integer: normally `i32`, but if compiled with `x64-backing-store` feature, can be an
+    /// `f64`.
     Integer(i_iof),
+    /// A float: normally `f32`, but if compiled with `x64-backing-store` feature, can be an
+    /// `f64`.
     Float(f_iof),
 }
 pub use IntegerOrFloat::{Float, Integer};

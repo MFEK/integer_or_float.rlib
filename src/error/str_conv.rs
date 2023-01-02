@@ -6,10 +6,15 @@ use std::error::Error;
 #[cfg(no_std)]
 trait Error {}
 
+/// Conversion from string, specifically to float, failed.
+///
+/// NB: Strings returned are identical to num-traits and [`core::num::ParseFloatError`].
 #[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
 pub enum IofParseFloatError {
+    /// cannot parse float from empty string
     Empty,
     #[default]
+    /// invalid float literal
     Invalid,
 }
 
@@ -26,8 +31,12 @@ macro_rules! float_conversion_define_enum {
     ($($ty:tt)*) => (
         #[derive(Debug)]
         #[non_exhaustive]
+        /// Conversion from string of either [`crate::IntegerOrFloat`] variant failed.
         pub enum ConversionError<T: $($ty)*> where T: $($ty)* {
+            /// Bad string conversion requested
             IntegerConversionError(ParseIntError),
+            /// `T` depends on your build flags. Can be [`core::num::ParseFloatError`] or the
+            /// idential trait in num-traits crate.
             FloatConversionError(T),
         }
 

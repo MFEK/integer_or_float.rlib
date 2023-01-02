@@ -1,6 +1,6 @@
 [package]
 name = "integer_or_float"
-version = "0.3.0"
+version = "0.3.1"
 authors = ["Fredrick Brennan <copypaste@kittens.ph>"]
 edition = "2021"
 build = "build.rs"
@@ -33,7 +33,7 @@ serde_json = "1.0"
 numerical-traits = ["float-cmp", "float-cmp/std", "num-traits", "num-traits/std"]
 faster-strconv = ["ryu"]
 more-serde = ["serde", "serde/std", "serde/default"]
-default = ["numerical-traits"]
+default = ["numerical-traits", "log"]
 fat = ["more-serde", "faster-strconv", "default"]
 x64-backing-store = []
 
