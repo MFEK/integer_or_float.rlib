@@ -16,3 +16,5 @@ impl Hash for IntegerOrFloat {
         }
     }
 }
+
+impl Eq for IntegerOrFloat {}

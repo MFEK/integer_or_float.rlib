@@ -52,3 +52,9 @@ fn test_hash_inf() {
     //eprintln!("{:?}", f32::from_encoded(f32::INFINITY.integer_decode()));
     test_hash_eq((Float(f32::INFINITY), Float(f32::INFINITY)));
 }
+
+#[test]
+fn test_eq() {
+    assert_eq!(Float(4.25), Float(4.25));
+    assert_ne!(Float(4.25), Float(4.26));
+}

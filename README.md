@@ -1,4 +1,4 @@
-# `integer_or_float` v0.3.1
+# `integer_or_float` v0.3.2
 
 <div align="center">
   <a href="https://docs.rs/integer_or_float">
